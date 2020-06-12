@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wd.erp.mapper.PubCommodityInfoMapper">
+    <resultMap id="BaseResultMap" type="com.wd.erp.model.PubCommodityInfo">
+        <id column="COMMODITY_CODE" property="commodityCode" jdbcType="VARCHAR"/>
+        <result column="SPEC_CODE" property="specCode" jdbcType="VARCHAR"/>
+        <result column="COMMODITY_NAME" property="commodityName" jdbcType="VARCHAR"/>
+        <result column="COMMODITY_SPELL" property="commoditySpell" jdbcType="VARCHAR"/>
+        <result column="UNIT_CODE" property="unitCode" jdbcType="VARCHAR"/>
+        <result column="TYPE_CODE" property="typeCode" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.wd.erp.model.PubCommodityInfo" extends="BaseResultMap">
+        <result column="REMARKS" property="remarks" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMapVo" type="com.wd.erp.model.PubCommodityInfo">
+        <id column="COMMODITY_CODE" property="commodityCode" jdbcType="VARCHAR"/>
+        <result column="COMMODITY_NAME" property="commodityName" jdbcType="VARCHAR"/>
+        <result column="COMMODITY_SPELL" property="commoditySpell" jdbcType="VARCHAR"/>
+        <result column="SPEC_CODE" property="specCode" jdbcType="VARCHAR"/>
+        <result column="SPEC_NAME" property="specName" jdbcType="VARCHAR"/>
+        <result column="TYPE_CODE" property="typeCode" jdbcType="VARCHAR"/>
+        <result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR"/>
+        <result column="UNIT_CODE" property="unitCode" jdbcType="VARCHAR"/>
+        <result column="UNIT_NAME" property="unitName" jdbcType="VARCHAR"/>
+        <result column="SUPPLIER_CODE" property="supplierCode" jdbcType="VARCHAR"/>
+        <result column="SUPPLIER_NAME" property="supplierName" jdbcType="VARCHAR"/>
+        <result column="REMARKS" property="remarks" jdbcType="LONGVARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="INTEGER"/>
+        <result column="STATUSNAME" property="statusName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    commodity_code, commodity_name, commodity_spell, spec_code, type_code, unit_code, supplier_code
+  </sql>
+    <sql id="Blob_Column_List">
+    REMARKS
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from pub_commodity_info
+        where COMMODITY_CODE = #{commodityCode,jdbcType=VARCHAR}
+    </select>
+    <select id="getAll" resultMap="BaseResultMapVo" parameterType="string">
+        select t.COMMODITY_CODE,
+        t.COMMODITY_NAME,
+        t.COMMODITY_SPELL,
+        t.SPEC_CODE,
+        s.SPEC_NAME,
+        t.TYPE_CODE,
+        pct.TYPE_NAME,
+        t.UNIT_CODE,
+        pu.UNIT_NAME,
+        t.SUPPLIER_CODE,
+        psi.NAME SUPPLIER_NAME,
+        t.REMARKS,
+        t.STATUS,
+        case when t.STATUS = 0 then '启用' else '停用' end as STATUSNAME
+        from pub_commodity_info t
+        left join pub_commodity_spec s on t.SPEC_CODE = s.SPEC_CODE
+        left join pub_commodity_type pct on t.TYPE_CODE = pct.TYPE_CODE
+        left join pub_supplier_info psi on t.SUPPLIER_CODE = psi.CODE
+        left join pub_unit pu on t.UNIT_CODE = pu.UNIT_CODE
+        <if test="keyWord != null and keyWord != ''">
+            where t.COMMODITY_CODE '%' || UPPER(#{keyWord,jdbcType=VARCHAR}) || '%'
+            OR t.COMMODITY_NAME '%' || UPPER(#{keyWord,jdbcType=VARCHAR}) || '%'
+            OR t.COMMODITY_SPELL '%' || UPPER(#{keyWord,jdbcType=VARCHAR}) || '%'
+        </if>
+    </select>
+    <select id="getMaxCode" resultType="java.lang.Integer">
+    select count(t.COMMODITY_CODE) from pub_commodity_info t
+  </select>
+    <select id="getById" resultMap="BaseResultMapVo" parameterType="string">
+     select t.COMMODITY_CODE,
+       t.COMMODITY_NAME,
+       t.COMMODITY_SPELL,
+       t.SPEC_CODE,
+       s.SPEC_NAME,
+       t.TYPE_CODE,
+       pct.TYPE_NAME,
+       t.UNIT_CODE,
+       pu.UNIT_NAME,
+       t.SUPPLIER_CODE,
+       psi.NAME SUPPLIER_NAME,
+       t.REMARKS,
+       t.STATUS,
+       case when t.STATUS = 0 then '启用' else '停用' end as STATUSNAME
+      from pub_commodity_info t
+          left join pub_commodity_spec s on t.SPEC_CODE = s.SPEC_CODE
+      left join pub_commodity_type pct on t.TYPE_CODE = pct.TYPE_CODE
+      left join pub_supplier_info psi on t.SUPPLIER_CODE = psi.CODE
+      left join pub_unit pu on t.UNIT_CODE = pu.UNIT_CODE
+      where t.COMMODITY_CODE = #{commodityCode,jdbcType=VARCHAR}
+  </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from pub_commodity_info
+    where COMMODITY_CODE = #{commodityCode,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.wd.erp.model.PubCommodityInfo">
+    insert into pub_commodity_info (COMMODITY_CODE,
+    SPEC_CODE,
+    COMMODITY_NAME,
+      COMMODITY_SPELL,
+      UNIT_CODE,
+      TYPE_CODE,
+      SUPPLIER_CODE,
+      STATUS,
+      REMARKS
+      )
+    values (#{commodityCode,jdbcType=VARCHAR}, #{specCode,jdbcType=VARCHAR}, #{commodityName,jdbcType=VARCHAR}, 
+      #{commoditySpell,jdbcType=VARCHAR}, #{unitCode,jdbcType=VARCHAR}, #{typeCode,jdbcType=VARCHAR}, 
+      #{supplierCode,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{remarks,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.wd.erp.model.PubCommodityInfo">
+        insert into pub_commodity_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="commodityCode != null">
+                COMMODITY_CODE,
+            </if>
+            <if test="specCode != null">
+                SPEC_CODE,
+            </if>
+            <if test="commodityName != null">
+                COMMODITY_NAME,
+            </if>
+            <if test="commoditySpell != null">
+                COMMODITY_SPELL,
+            </if>
+            <if test="unitCode != null">
+                UNIT_CODE,
+            </if>
+            <if test="typeCode != null">
+                TYPE_CODE,
+            </if>
+            <if test="supplierCode != null">
+              SUPPLIER_CODE,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="remarks != null">
+                REMARKS,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="commodityCode != null">
+                #{commodityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="specCode != null">
+                #{specCode,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityName != null">
+                #{commodityName,jdbcType=VARCHAR},
+            </if>
+            <if test="commoditySpell != null">
+                #{commoditySpell,jdbcType=VARCHAR},
+            </if>
+            <if test="unitCode != null">
+                #{unitCode,jdbcType=VARCHAR},
+            </if>
+            <if test="typeCode != null">
+                #{typeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierCode != null">
+                #{supplierCode,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="remarks != null">
+                #{remarks,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wd.erp.model.PubCommodityInfo">
+        update pub_commodity_info
+        <set>
+            <if test="specCode != null">
+                SPEC_CODE = #{specCode,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityName != null">
+                COMMODITY_NAME = #{commodityName,jdbcType=VARCHAR},
+            </if>
+            <if test="commoditySpell != null">
+                COMMODITY_SPELL = #{commoditySpell,jdbcType=VARCHAR},
+            </if>
+            <if test="unitCode != null">
+                UNIT_CODE = #{unitCode,jdbcType=VARCHAR},
+            </if>
+            <if test="typeCode != null">
+                TYPE_CODE = #{typeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityType != null">
+              SUPPLIER_CODE = #{supplierCode,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="remarks != null">
+                REMARKS = #{remarks,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where COMMODITY_CODE = #{commodityCode,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wd.erp.model.PubCommodityInfo">
+    update pub_commodity_info
+    set SPEC_CODE = #{specCode,jdbcType=VARCHAR},
+      COMMODITY_NAME = #{commodityName,jdbcType=VARCHAR},
+      COMMODITY_SPELL = #{commoditySpell,jdbcType=VARCHAR},
+      UNIT_CODE = #{unitCode,jdbcType=VARCHAR},
+      TYPE_CODE = #{typeCode,jdbcType=VARCHAR},
+      SUPPLIER_CODE = #{supplierCode,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=INTEGER},
+      REMARKS = #{remarks,jdbcType=LONGVARCHAR}
+    where COMMODITY_CODE = #{commodityCode,jdbcType=VARCHAR}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.wd.erp.model.PubCommodityInfo">
+    update pub_commodity_info
+    set SPEC_CODE = #{specCode,jdbcType=VARCHAR},
+      COMMODITY_NAME = #{commodityName,jdbcType=VARCHAR},
+      COMMODITY_SPELL = #{commoditySpell,jdbcType=VARCHAR},
+      UNIT_CODE = #{unitCode,jdbcType=VARCHAR},
+      TYPE_CODE = #{typeCode,jdbcType=VARCHAR},
+      UPPLIER_CODE = #{supplierCode,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=INTEGER}
+    where COMMODITY_CODE = #{commodityCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

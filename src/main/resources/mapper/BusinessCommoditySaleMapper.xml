@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wd.erp.mapper.BusinessCommoditySaleMapper">
+    <resultMap id="BaseResultMap" type="com.wd.erp.model.BusinessCommoditySale">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="COMMODITY_CODE" property="commodityCode" jdbcType="VARCHAR"/>
+        <result column="COMMODITY_NAME" property="commodityName" jdbcType="VARCHAR"/>
+        <result column="SALE_NUMBER" property="saleNumber" jdbcType="INTEGER"/>
+        <result column="SALE_PRICE" property="salePrice" jdbcType="DECIMAL"/>
+        <result column="CLIENT_CODE" property="clientCode" jdbcType="VARCHAR"/>
+        <result column="SALE_PERSON" property="salePerson" jdbcType="VARCHAR"/>
+        <result column="SALE_DATE" property="saleDate" jdbcType="TIMESTAMP"/>
+        <result column="STATUS" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.wd.erp.model.BusinessCommoditySale" extends="BaseResultMap">
+        <result column="REMARKS" property="remarks" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, COMMODITY_CODE, COMMODITY_NAME, SALE_NUMBER, SALE_PRICE, CLIENT_CODE, SALE_PERSON, 
+    SALE_DATE, STATUS
+  </sql>
+    <sql id="Blob_Column_List">
+    REMARKS
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from business_commodity_sale
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from business_commodity_sale
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.wd.erp.model.BusinessCommoditySale">
+    insert into business_commodity_sale (ID, COMMODITY_CODE, COMMODITY_NAME, 
+      SALE_NUMBER, SALE_PRICE, CLIENT_CODE, 
+      SALE_PERSON, SALE_DATE, STATUS, 
+      REMARKS)
+    values (#{id,jdbcType=VARCHAR}, #{commodityCode,jdbcType=VARCHAR}, #{commodityName,jdbcType=VARCHAR}, 
+      #{saleNumber,jdbcType=INTEGER}, #{salePrice,jdbcType=DECIMAL}, #{clientCode,jdbcType=VARCHAR}, 
+      #{salePerson,jdbcType=VARCHAR}, #{saleDate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER},
+      #{remarks,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.wd.erp.model.BusinessCommoditySale">
+        insert into business_commodity_sale
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="commodityCode != null">
+                COMMODITY_CODE,
+            </if>
+            <if test="commodityName != null">
+                COMMODITY_NAME,
+            </if>
+            <if test="saleNumber != null">
+                SALE_NUMBER,
+            </if>
+            <if test="salePrice != null">
+                SALE_PRICE,
+            </if>
+            <if test="clientCode != null">
+                CLIENT_CODE,
+            </if>
+            <if test="salePerson != null">
+                SALE_PERSON,
+            </if>
+            <if test="saleDate != null">
+                SALE_DATE,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="remarks != null">
+                REMARKS,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityCode != null">
+                #{commodityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityName != null">
+                #{commodityName,jdbcType=VARCHAR},
+            </if>
+            <if test="saleNumber != null">
+                #{saleNumber,jdbcType=INTEGER},
+            </if>
+            <if test="salePrice != null">
+                #{salePrice,jdbcType=DECIMAL},
+            </if>
+            <if test="clientCode != null">
+                #{clientCode,jdbcType=VARCHAR},
+            </if>
+            <if test="salePerson != null">
+                #{salePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="saleDate != null">
+                #{saleDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="remarks != null">
+                #{remarks,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wd.erp.model.BusinessCommoditySale">
+        update business_commodity_sale
+        <set>
+            <if test="commodityCode != null">
+                COMMODITY_CODE = #{commodityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityName != null">
+                COMMODITY_NAME = #{commodityName,jdbcType=VARCHAR},
+            </if>
+            <if test="saleNumber != null">
+                SALE_NUMBER = #{saleNumber,jdbcType=INTEGER},
+            </if>
+            <if test="salePrice != null">
+                SALE_PRICE = #{salePrice,jdbcType=DECIMAL},
+            </if>
+            <if test="clientCode != null">
+                CLIENT_CODE = #{clientCode,jdbcType=VARCHAR},
+            </if>
+            <if test="salePerson != null">
+                SALE_PERSON = #{salePerson,jdbcType=VARCHAR},
+            </if>
+            <if test="saleDate != null">
+                SALE_DATE = #{saleDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="remarks != null">
+                REMARKS = #{remarks,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wd.erp.model.BusinessCommoditySale">
+    update business_commodity_sale
+    set COMMODITY_CODE = #{commodityCode,jdbcType=VARCHAR},
+      COMMODITY_NAME = #{commodityName,jdbcType=VARCHAR},
+      SALE_NUMBER = #{saleNumber,jdbcType=INTEGER},
+      SALE_PRICE = #{salePrice,jdbcType=DECIMAL},
+      CLIENT_CODE = #{clientCode,jdbcType=VARCHAR},
+      SALE_PERSON = #{salePerson,jdbcType=VARCHAR},
+      SALE_DATE = #{saleDate,jdbcType=TIMESTAMP},
+      STATUS = #{status,jdbcType=INTEGER},
+      REMARKS = #{remarks,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.wd.erp.model.BusinessCommoditySale">
+    update business_commodity_sale
+    set COMMODITY_CODE = #{commodityCode,jdbcType=VARCHAR},
+      COMMODITY_NAME = #{commodityName,jdbcType=VARCHAR},
+      SALE_NUMBER = #{saleNumber,jdbcType=INTEGER},
+      SALE_PRICE = #{salePrice,jdbcType=DECIMAL},
+      CLIENT_CODE = #{clientCode,jdbcType=VARCHAR},
+      SALE_PERSON = #{salePerson,jdbcType=VARCHAR},
+      SALE_DATE = #{saleDate,jdbcType=TIMESTAMP},
+      STATUS = #{status,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="getMaxCode" resultType="int">
+      select count(t.ID) from business_commodity_sale t
+    </select>
+    <select id="getAll" resultType="com.wd.erp.model.BusinessCommoditySaleVo">
+    select s.ID               id,
+           s.COMMODITY_CODE   commodityCode,
+           pci.COMMODITY_NAME commodityName,
+           pu.UNIT_CODE       unitCode,
+           pu.UNIT_NAME       unitName,
+           pci.SPEC_CODE      specCode,
+           pcs.SPEC_NAME      specName,
+           pci.TYPE_CODE      typeCode,
+           pct.TYPE_NAME      typeName,
+           pci.SUPPLIER_CODE  supplierCode,
+           psi.NAME           supplierName,
+           s.CLIENT_CODE      clientCode,
+           pc.NAME            clientName,
+           s.SALE_NUMBER      saleNumber,
+           s.SALE_PRICE       salePrice,
+           s.SALE_PERSON      salePerson,
+           s.SALE_DATE     saleDate,
+           s.REMARKS          remarks,
+           s.STATUS           status,
+           case
+               when s.STATUS = 0
+                   then '启用'
+               else '作废' end
+               as             statusName
+    from business_commodity_sale s
+             left join pub_commodity_info pci on s.COMMODITY_CODE = pci.COMMODITY_CODE
+             left join pub_commodity_spec pcs on pci.SPEC_CODE = pcs.SPEC_CODE
+             left join pub_commodity_type pct on pci.TYPE_CODE = pct.TYPE_CODE
+             left join pub_supplier_info psi on pci.SUPPLIER_CODE = psi.CODE
+             left join pub_unit pu on pci.UNIT_CODE = pu.UNIT_CODE
+             left join pub_client_info pc on s.CLIENT_CODE = pc.CODE
+  </select>
+    <update id="auditVoidRecord" parameterType="string">
+        update business_commodity_sale t set t.status = #{status,jdbcType=VARCHAR}
+        WHERE t.id = #{id,jdbcType=VARCHAR}
+    </update>
+    <select id="getCommodityMonthSaleList" resultType="com.wd.erp.model.CommodityMonthSale" parameterType="String">
+        select
+         aa.commodityCode,
+         aa.commodityName,
+         sum(aa.saleNumber) saleNumber,
+         sum(aa.salePrice) salePrice,
+         sum(aa.saleTotalPrice) saleTotalPrice
+        from (
+        select s.COMMODITY_CODE   commodityCode,
+        pci.COMMODITY_NAME commodityName,
+        s.SALE_NUMBER      saleNumber,
+        s.SALE_PRICE       salePrice,
+         (s.SALE_NUMBER * s.SALE_PRICE) saleTotalPrice
+        from business_commodity_sale s
+        left join pub_commodity_info pci on s.COMMODITY_CODE = pci.COMMODITY_CODE
+        where s.status = 0
+        and s.SALE_DATE  <![CDATA[ >= ]]> str_to_date(#{beginDate,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')
+        and s.SALE_DATE <![CDATA[ <= ]]>  str_to_date(#{endDate,jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s')) aa
+        group by aa.commodityCode, aa.commodityName
+    </select>
+</mapper>

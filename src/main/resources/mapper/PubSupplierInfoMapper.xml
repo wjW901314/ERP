@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wd.erp.mapper.PubSupplierInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wd.erp.model.PubSupplierInfo" >
+    <id column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="SPELL" property="spell" jdbcType="VARCHAR" />
+    <result column="ADDERS" property="adders" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.wd.erp.model.PubSupplierInfo" extends="BaseResultMap" >
+    <result column="REMARKS" property="remarks" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CODE, NAME, SPELL, ADDERS, PHONE, EMAIL, STATUS
+  </sql>
+  <sql id="Blob_Column_List" >
+    REMARKS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pub_supplier_info
+    where CODE = #{code,jdbcType=VARCHAR}
+  </select>
+    <select id="getAll" resultType="com.wd.erp.model.PubSupplierInfo">
+      select
+      <include refid="Base_Column_List"></include>,
+      <include refid="Blob_Column_List"></include>
+      from pub_supplier_info t
+      <if test="keyWord != null and keyWord != ''">
+        where t.CODE like '%' || UPPER (#{keyWord}) || '%'
+        OR t.name like '%' || UPPER (#{keyWord}) || '%'
+        OR t.spell like '%' || UPPER (#{keyWord}) || '%'
+      </if>
+    </select>
+  <select id="getMaxCode" resultType="java.lang.Integer">
+    select count(t.code) from pub_supplier_info t
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from pub_supplier_info
+    where CODE = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.wd.erp.model.PubSupplierInfo" >
+    insert into pub_supplier_info (CODE, NAME, SPELL, 
+      ADDERS, PHONE, EMAIL, 
+      STATUS, REMARKS)
+    values (#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{spell,jdbcType=VARCHAR}, 
+      #{adders,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{remarks,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wd.erp.model.PubSupplierInfo" >
+    insert into pub_supplier_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="spell != null" >
+        SPELL,
+      </if>
+      <if test="adders != null" >
+        ADDERS,
+      </if>
+      <if test="phone != null" >
+        PHONE,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="remarks != null" >
+        REMARKS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="spell != null" >
+        #{spell,jdbcType=VARCHAR},
+      </if>
+      <if test="adders != null" >
+        #{adders,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wd.erp.model.PubSupplierInfo" >
+    update pub_supplier_info
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="spell != null" >
+        SPELL = #{spell,jdbcType=VARCHAR},
+      </if>
+      <if test="adders != null" >
+        ADDERS = #{adders,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        REMARKS = #{remarks,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wd.erp.model.PubSupplierInfo" >
+    update pub_supplier_info
+    set NAME = #{name,jdbcType=VARCHAR},
+      SPELL = #{spell,jdbcType=VARCHAR},
+      ADDERS = #{adders,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=INTEGER},
+      REMARKS = #{remarks,jdbcType=LONGVARCHAR}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wd.erp.model.PubSupplierInfo" >
+    update pub_supplier_info
+    set NAME = #{name,jdbcType=VARCHAR},
+      SPELL = #{spell,jdbcType=VARCHAR},
+      ADDERS = #{adders,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=INTEGER}
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+</mapper>

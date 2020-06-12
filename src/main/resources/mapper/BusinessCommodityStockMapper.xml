@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wd.erp.mapper.BusinessCommodityStockMapper">
+    <resultMap id="BaseResultMap" type="com.wd.erp.model.BusinessCommodityStock">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="COMMODITY_CODE" property="commodityCode" jdbcType="VARCHAR"/>
+        <result column="LARGE_UNIT" property="largeUnit" jdbcType="VARCHAR"/>
+        <result column="SMALL_UNIT" property="smallUnit" jdbcType="VARCHAR"/>
+        <result column="TOTAL_PRICE" property="totalPrice" jdbcType="DECIMAL"/>
+        <result column="INVENTORY" property="inventory" jdbcType="INTEGER"/>
+        <result column="PRICE" property="price" jdbcType="DECIMAL"/>
+        <result column="MINIMUM_INVENTORY" property="minimumInventory" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="BaseResultMapVo" type="com.wd.erp.model.BusinessCommodityStockVo">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="commodityCode" property="commodityCode" jdbcType="VARCHAR"/>
+        <result column="commodityName" property="commodityName" jdbcType="VARCHAR"/>
+        <result column="commoditySpell" property="commoditySpell" jdbcType="VARCHAR"/>
+        <result column="largeUnit" property="largeUnit" jdbcType="VARCHAR"/>
+        <result column="smallUnit" property="smallUnit" jdbcType="VARCHAR"/>
+        <result column="specCode" property="specCode" jdbcType="VARCHAR"/>
+        <result column="specName" property="specName" jdbcType="VARCHAR"/>
+        <result column="supplierCode" property="supplierCode" jdbcType="VARCHAR"/>
+        <result column="supplierName" property="supplierName" jdbcType="VARCHAR"/>
+        <result column="typeCode" property="typeCode" jdbcType="VARCHAR"/>
+        <result column="typeName" property="typeName" jdbcType="VARCHAR"/>
+        <result column="totalPrice" property="totalPrice" jdbcType="DECIMAL"/>
+        <result column="inventory" property="inventory" jdbcType="INTEGER"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="minimumInventory" property="minimumInventory" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, COMMODITY_CODE, LARGE_UNIT, SMALL_UNIT, TOTAL_PRICE, INVENTORY, PRICE,
+    MINIMUM_INVENTORY
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from business_commodity_stock
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="getAll" resultMap="BaseResultMapVo">
+        select s.ID                    id,
+               s.COMMODITY_CODE        commodityCode,
+               pci.COMMODITY_NAME      commodityName,
+               pu.UNIT_NAME            largeUnit,
+               pu.UNIT_NAME            smallUnit,
+               pcs.SPEC_CODE           specCode,
+               pcs.SPEC_NAME           specName,
+               pct.TYPE_CODE           typeCode,
+               pct.TYPE_NAME           typeName,
+               psi.CODE                supplierCode,
+               psi.NAME                supplierName,
+               s.TOTAL_PRICE totalPrice,
+               s.INVENTORY             inventory,
+               s.PRICE                 price,
+               s.MINIMUM_INVENTORY     minimumInventory
+        from business_commodity_stock s
+                 left join pub_commodity_info pci on s.COMMODITY_CODE = pci.COMMODITY_CODE
+                 left join pub_commodity_spec pcs on pci.SPEC_CODE = pcs.SPEC_CODE
+                 left join pub_commodity_type pct on pci.TYPE_CODE = pct.TYPE_CODE
+                 left join pub_supplier_info psi on pci.SUPPLIER_CODE = psi.CODE
+                 left join pub_unit pu on s.LARGE_UNIT = pu.UNIT_CODE
+    </select>
+    <select id="fuzzyStockRecord" resultMap="BaseResultMapVo">
+    select s.ID id,
+               s.COMMODITY_CODE commodityCode,
+               pci.COMMODITY_NAME commodityName,
+               s.LARGE_UNIT largeUnit,
+               s.SMALL_UNIT smallUnit,
+               pcs.SPEC_CODE specCode,
+               pcs.SPEC_NAME specName,
+               pct.TYPE_CODE typeCode,
+               pct.TYPE_NAME typeName,
+               psi.CODE supplierCode,
+               psi.NAME supplierName,
+               (s.PRICE * s.INVENTORY)  totalPrice,
+               s.INVENTORY inventory,
+               s.PRICE price,
+               s.MINIMUM_INVENTORY minimumInventory
+        from business_commodity_stock s
+             left join pub_commodity_info pci on s.COMMODITY_CODE = pci.COMMODITY_CODE
+             left join pub_commodity_spec pcs on pci.SPEC_CODE = pcs.SPEC_CODE
+             left join pub_commodity_type pct on pci.TYPE_CODE = pct.TYPE_CODE
+             left join pub_supplier_info psi on pci.SUPPLIER_CODE = psi.CODE
+        WHERE s.status = 0
+        and s.COMMODITY_CODE like '%' || UPPER (#{keyWord}) || '%'
+        or pci.COMMODITY_NAME like '%' || UPPER (#{keyWord}) || '%'
+       or pci.COMMODITY_SPELL like '%' || UPPER (#{keyWord}) || '%'
+  </select>
+    <select id="getMaxCode" resultType="java.lang.Integer">
+    select count(t.id) from business_commodity_stock t
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from business_commodity_stock
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.wd.erp.model.BusinessCommodityStock">
+    insert into business_commodity_stock (ID, COMMODITY_CODE, LARGE_UNIT, 
+      SMALL_UNIT, TOTAL_PRICE,
+      INVENTORY, PRICE, MINIMUM_INVENTORY
+      )
+    values (#{id,jdbcType=VARCHAR}, #{commodityCode,jdbcType=VARCHAR}, #{largeUnit,jdbcType=VARCHAR}, 
+      #{smallUnit,jdbcType=VARCHAR}, #{totalPrice,jdbcType=DECIMAL},
+      #{inventory,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{minimumInventory,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.wd.erp.model.BusinessCommodityStock">
+        insert into business_commodity_stock
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="commodityCode != null">
+                COMMODITY_CODE,
+            </if>
+            <if test="largeUnit != null">
+                LARGE_UNIT,
+            </if>
+            <if test="smallUnit != null">
+                SMALL_UNIT,
+            </if>
+            <if test="totalPrice != null">
+                TOTAL_PRICE,
+            </if>
+            <if test="inventory != null">
+                INVENTORY,
+            </if>
+            <if test="price != null">
+                PRICE,
+            </if>
+            <if test="minimumInventory != null">
+                MINIMUM_INVENTORY,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityCode != null">
+                #{commodityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="largeUnit != null">
+                #{largeUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="smallUnit != null">
+                #{smallUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="totalPrice != null">
+                #{totalPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="inventory != null">
+                #{inventory,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="minimumInventory != null">
+                #{minimumInventory,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wd.erp.model.BusinessCommodityStock">
+        update business_commodity_stock
+        <set>
+            <if test="commodityCode != null">
+                COMMODITY_CODE = #{commodityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="largeUnit != null">
+                LARGE_UNIT = #{largeUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="smallUnit != null">
+                SMALL_UNIT = #{smallUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="totalPrice != null">
+                TOTAL_PRICE = #{totalPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="inventory != null">
+                INVENTORY = #{inventory,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                PRICE = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="minimumInventory != null">
+                MINIMUM_INVENTORY = #{minimumInventory,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wd.erp.model.BusinessCommodityStock">
+    update business_commodity_stock
+    set COMMODITY_CODE = #{commodityCode,jdbcType=VARCHAR},
+      LARGE_UNIT = #{largeUnit,jdbcType=VARCHAR},
+      SMALL_UNIT = #{smallUnit,jdbcType=VARCHAR},
+      TOTAL_PRICE = #{totalPrice,jdbcType=DECIMAL},
+      INVENTORY = #{inventory,jdbcType=INTEGER},
+      PRICE = #{price,jdbcType=DECIMAL},
+      MINIMUM_INVENTORY = #{minimumInventory,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

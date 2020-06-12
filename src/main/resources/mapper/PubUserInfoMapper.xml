@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wd.erp.mapper.PubUserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wd.erp.model.PubUserInfo" >
+    <id column="USER_CODE" property="userCode" jdbcType="VARCHAR" />
+    <result column="DEPART_CODE" property="departCode" jdbcType="VARCHAR" />
+    <result column="ROLE_COED" property="roleCoed" jdbcType="VARCHAR" />
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+    <result column="USER_SPELL" property="userSpell" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    USER_CODE, DEPART_CODE, ROLE_COED, USER_NAME, USER_SPELL, PASSWORD, STATUS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from pub_userinfo
+    where USER_CODE = #{userCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from pub_userinfo
+    where USER_CODE = #{userCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.wd.erp.model.PubUserInfo" >
+    insert into pub_userinfo (USER_CODE, DEPART_CODE, ROLE_COED, 
+      USER_NAME, USER_SPELL, PASSWORD, 
+      STATUS)
+    values (#{userCode,jdbcType=VARCHAR}, #{departCode,jdbcType=VARCHAR}, #{roleCoed,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{userSpell,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wd.erp.model.PubUserInfo" >
+    insert into pub_userinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userCode != null" >
+        USER_CODE,
+      </if>
+      <if test="departCode != null" >
+        DEPART_CODE,
+      </if>
+      <if test="roleCoed != null" >
+        ROLE_COED,
+      </if>
+      <if test="userName != null" >
+        USER_NAME,
+      </if>
+      <if test="userSpell != null" >
+        USER_SPELL,
+      </if>
+      <if test="password != null" >
+        PASSWORD,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="departCode != null" >
+        #{departCode,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCoed != null" >
+        #{roleCoed,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSpell != null" >
+        #{userSpell,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wd.erp.model.PubUserInfo" >
+    update pub_userinfo
+    <set >
+      <if test="departCode != null" >
+        DEPART_CODE = #{departCode,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCoed != null" >
+        ROLE_COED = #{roleCoed,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSpell != null" >
+        USER_SPELL = #{userSpell,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where USER_CODE = #{userCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wd.erp.model.PubUserInfo" >
+    update pub_userinfo
+    set DEPART_CODE = #{departCode,jdbcType=VARCHAR},
+      ROLE_COED = #{roleCoed,jdbcType=VARCHAR},
+      USER_NAME = #{userName,jdbcType=VARCHAR},
+      USER_SPELL = #{userSpell,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=INTEGER}
+    where USER_CODE = #{userCode,jdbcType=VARCHAR}
+  </update>
+  <select id="getAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"></include>
+    from pub_userinfo
+  </select>
+  <select id="getMaxUserCode" resultType="int">
+    select count(*) from pub_userinfo
+  </select>
+</mapper>

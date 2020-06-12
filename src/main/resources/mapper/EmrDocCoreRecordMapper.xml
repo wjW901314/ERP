@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wd.erp.mapper.EmrDocCoreRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.wd.erp.model.EmrDocCoreRecode" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="REGISTERATION_ID" property="registerationId" jdbcType="VARCHAR" />
+    <result column="DOC_ID" property="docId" jdbcType="VARCHAR" />
+    <result column="DISCUSS_ADDERS" property="discussAdders" jdbcType="VARCHAR" />
+    <result column="DISCUSS_DATE" property="discussDate" jdbcType="DATE" />
+    <result column="REGISTRANT" property="registrant" jdbcType="VARCHAR" />
+    <result column="REGISTRANT_TITLE" property="registrantTitle" jdbcType="VARCHAR" />
+    <result column="REGISTRANT_DEPART" property="registrantDepart" jdbcType="VARCHAR" />
+    <result column="DISEASE" property="disease" jdbcType="VARCHAR" />
+    <result column="OPERATION" property="operation" jdbcType="VARCHAR" />
+    <result column="NARCOSIS" property="narcosis" jdbcType="VARCHAR" />
+    <result column="RECORDER" property="recorder" jdbcType="VARCHAR" />
+    <result column="RECORDER_DEPART" property="recorderDepart" jdbcType="VARCHAR" />
+    <result column="RECORD_DATE" property="recordDate" jdbcType="DATE" />
+    <result column="REGISTRANT_REVIEW" property="registrantReview" jdbcType="VARCHAR" />
+    <result column="REVIVE_DATE" property="reviveDate" jdbcType="DATE" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="CORE_TYPE" property="coreType" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.wd.erp.model.EmrDocCoreRecodeWithBLOBs" extends="BaseResultMap" >
+    <result column="BRIEF_ILLNESS" property="briefIllness" jdbcType="LONGVARCHAR" />
+    <result column="REGISTRANT_SUMMARY" property="registrantSummary" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, REGISTERATION_ID, DOC_ID, DISCUSS_ADDERS, DISCUSS_DATE, REGISTRANT, REGISTRANT_TITLE, 
+    REGISTRANT_DEPART, DISEASE, OPERATION, NARCOSIS, RECORDER, RECORDER_DEPART, RECORD_DATE, 
+    REGISTRANT_REVIEW, REVIVE_DATE, STATUS, CORE_TYPE
+  </sql>
+  <sql id="Blob_Column_List" >
+    BRIEF_ILLNESS, REGISTRANT_SUMMARY
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from emr_doc_core_recode
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from emr_doc_core_recode
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.wd.erp.model.EmrDocCoreRecodeWithBLOBs" >
+    insert into emr_doc_core_recode (ID, REGISTERATION_ID, DOC_ID, 
+      DISCUSS_ADDERS, DISCUSS_DATE, REGISTRANT, 
+      REGISTRANT_TITLE, REGISTRANT_DEPART, DISEASE, 
+      OPERATION, NARCOSIS, RECORDER, 
+      RECORDER_DEPART, RECORD_DATE, REGISTRANT_REVIEW, 
+      REVIVE_DATE, STATUS, CORE_TYPE, 
+      BRIEF_ILLNESS, REGISTRANT_SUMMARY
+      )
+    values (#{id,jdbcType=VARCHAR}, #{registerationId,jdbcType=VARCHAR}, #{docId,jdbcType=VARCHAR}, 
+      #{discussAdders,jdbcType=VARCHAR}, #{discussDate,jdbcType=DATE}, #{registrant,jdbcType=VARCHAR}, 
+      #{registrantTitle,jdbcType=VARCHAR}, #{registrantDepart,jdbcType=VARCHAR}, #{disease,jdbcType=VARCHAR}, 
+      #{operation,jdbcType=VARCHAR}, #{narcosis,jdbcType=VARCHAR}, #{recorder,jdbcType=VARCHAR}, 
+      #{recorderDepart,jdbcType=VARCHAR}, #{recordDate,jdbcType=DATE}, #{registrantReview,jdbcType=VARCHAR}, 
+      #{reviveDate,jdbcType=DATE}, #{status,jdbcType=INTEGER}, #{coreType,jdbcType=INTEGER}, 
+      #{briefIllness,jdbcType=LONGVARCHAR}, #{registrantSummary,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wd.erp.model.EmrDocCoreRecodeWithBLOBs" >
+    insert into emr_doc_core_recode
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="registerationId != null" >
+        REGISTERATION_ID,
+      </if>
+      <if test="docId != null" >
+        DOC_ID,
+      </if>
+      <if test="discussAdders != null" >
+        DISCUSS_ADDERS,
+      </if>
+      <if test="discussDate != null" >
+        DISCUSS_DATE,
+      </if>
+      <if test="registrant != null" >
+        REGISTRANT,
+      </if>
+      <if test="registrantTitle != null" >
+        REGISTRANT_TITLE,
+      </if>
+      <if test="registrantDepart != null" >
+        REGISTRANT_DEPART,
+      </if>
+      <if test="disease != null" >
+        DISEASE,
+      </if>
+      <if test="operation != null" >
+        OPERATION,
+      </if>
+      <if test="narcosis != null" >
+        NARCOSIS,
+      </if>
+      <if test="recorder != null" >
+        RECORDER,
+      </if>
+      <if test="recorderDepart != null" >
+        RECORDER_DEPART,
+      </if>
+      <if test="recordDate != null" >
+        RECORD_DATE,
+      </if>
+      <if test="registrantReview != null" >
+        REGISTRANT_REVIEW,
+      </if>
+      <if test="reviveDate != null" >
+        REVIVE_DATE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="coreType != null" >
+        CORE_TYPE,
+      </if>
+      <if test="briefIllness != null" >
+        BRIEF_ILLNESS,
+      </if>
+      <if test="registrantSummary != null" >
+        REGISTRANT_SUMMARY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="registerationId != null" >
+        #{registerationId,jdbcType=VARCHAR},
+      </if>
+      <if test="docId != null" >
+        #{docId,jdbcType=VARCHAR},
+      </if>
+      <if test="discussAdders != null" >
+        #{discussAdders,jdbcType=VARCHAR},
+      </if>
+      <if test="discussDate != null" >
+        #{discussDate,jdbcType=DATE},
+      </if>
+      <if test="registrant != null" >
+        #{registrant,jdbcType=VARCHAR},
+      </if>
+      <if test="registrantTitle != null" >
+        #{registrantTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="registrantDepart != null" >
+        #{registrantDepart,jdbcType=VARCHAR},
+      </if>
+      <if test="disease != null" >
+        #{disease,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null" >
+        #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="narcosis != null" >
+        #{narcosis,jdbcType=VARCHAR},
+      </if>
+      <if test="recorder != null" >
+        #{recorder,jdbcType=VARCHAR},
+      </if>
+      <if test="recorderDepart != null" >
+        #{recorderDepart,jdbcType=VARCHAR},
+      </if>
+      <if test="recordDate != null" >
+        #{recordDate,jdbcType=DATE},
+      </if>
+      <if test="registrantReview != null" >
+        #{registrantReview,jdbcType=VARCHAR},
+      </if>
+      <if test="reviveDate != null" >
+        #{reviveDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="coreType != null" >
+        #{coreType,jdbcType=INTEGER},
+      </if>
+      <if test="briefIllness != null" >
+        #{briefIllness,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="registrantSummary != null" >
+        #{registrantSummary,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wd.erp.model.EmrDocCoreRecodeWithBLOBs" >
+    update emr_doc_core_recode
+    <set >
+      <if test="registerationId != null" >
+        REGISTERATION_ID = #{registerationId,jdbcType=VARCHAR},
+      </if>
+      <if test="docId != null" >
+        DOC_ID = #{docId,jdbcType=VARCHAR},
+      </if>
+      <if test="discussAdders != null" >
+        DISCUSS_ADDERS = #{discussAdders,jdbcType=VARCHAR},
+      </if>
+      <if test="discussDate != null" >
+        DISCUSS_DATE = #{discussDate,jdbcType=DATE},
+      </if>
+      <if test="registrant != null" >
+        REGISTRANT = #{registrant,jdbcType=VARCHAR},
+      </if>
+      <if test="registrantTitle != null" >
+        REGISTRANT_TITLE = #{registrantTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="registrantDepart != null" >
+        REGISTRANT_DEPART = #{registrantDepart,jdbcType=VARCHAR},
+      </if>
+      <if test="disease != null" >
+        DISEASE = #{disease,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null" >
+        OPERATION = #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="narcosis != null" >
+        NARCOSIS = #{narcosis,jdbcType=VARCHAR},
+      </if>
+      <if test="recorder != null" >
+        RECORDER = #{recorder,jdbcType=VARCHAR},
+      </if>
+      <if test="recorderDepart != null" >
+        RECORDER_DEPART = #{recorderDepart,jdbcType=VARCHAR},
+      </if>
+      <if test="recordDate != null" >
+        RECORD_DATE = #{recordDate,jdbcType=DATE},
+      </if>
+      <if test="registrantReview != null" >
+        REGISTRANT_REVIEW = #{registrantReview,jdbcType=VARCHAR},
+      </if>
+      <if test="reviveDate != null" >
+        REVIVE_DATE = #{reviveDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="coreType != null" >
+        CORE_TYPE = #{coreType,jdbcType=INTEGER},
+      </if>
+      <if test="briefIllness != null" >
+        BRIEF_ILLNESS = #{briefIllness,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="registrantSummary != null" >
+        REGISTRANT_SUMMARY = #{registrantSummary,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wd.erp.model.EmrDocCoreRecodeWithBLOBs" >
+    update emr_doc_core_recode
+    set REGISTERATION_ID = #{registerationId,jdbcType=VARCHAR},
+      DOC_ID = #{docId,jdbcType=VARCHAR},
+      DISCUSS_ADDERS = #{discussAdders,jdbcType=VARCHAR},
+      DISCUSS_DATE = #{discussDate,jdbcType=DATE},
+      REGISTRANT = #{registrant,jdbcType=VARCHAR},
+      REGISTRANT_TITLE = #{registrantTitle,jdbcType=VARCHAR},
+      REGISTRANT_DEPART = #{registrantDepart,jdbcType=VARCHAR},
+      DISEASE = #{disease,jdbcType=VARCHAR},
+      OPERATION = #{operation,jdbcType=VARCHAR},
+      NARCOSIS = #{narcosis,jdbcType=VARCHAR},
+      RECORDER = #{recorder,jdbcType=VARCHAR},
+      RECORDER_DEPART = #{recorderDepart,jdbcType=VARCHAR},
+      RECORD_DATE = #{recordDate,jdbcType=DATE},
+      REGISTRANT_REVIEW = #{registrantReview,jdbcType=VARCHAR},
+      REVIVE_DATE = #{reviveDate,jdbcType=DATE},
+      STATUS = #{status,jdbcType=INTEGER},
+      CORE_TYPE = #{coreType,jdbcType=INTEGER},
+      BRIEF_ILLNESS = #{briefIllness,jdbcType=LONGVARCHAR},
+      REGISTRANT_SUMMARY = #{registrantSummary,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wd.erp.model.EmrDocCoreRecode" >
+    update emr_doc_core_recode
+    set REGISTERATION_ID = #{registerationId,jdbcType=VARCHAR},
+      DOC_ID = #{docId,jdbcType=VARCHAR},
+      DISCUSS_ADDERS = #{discussAdders,jdbcType=VARCHAR},
+      DISCUSS_DATE = #{discussDate,jdbcType=DATE},
+      REGISTRANT = #{registrant,jdbcType=VARCHAR},
+      REGISTRANT_TITLE = #{registrantTitle,jdbcType=VARCHAR},
+      REGISTRANT_DEPART = #{registrantDepart,jdbcType=VARCHAR},
+      DISEASE = #{disease,jdbcType=VARCHAR},
+      OPERATION = #{operation,jdbcType=VARCHAR},
+      NARCOSIS = #{narcosis,jdbcType=VARCHAR},
+      RECORDER = #{recorder,jdbcType=VARCHAR},
+      RECORDER_DEPART = #{recorderDepart,jdbcType=VARCHAR},
+      RECORD_DATE = #{recordDate,jdbcType=DATE},
+      REGISTRANT_REVIEW = #{registrantReview,jdbcType=VARCHAR},
+      REVIVE_DATE = #{reviveDate,jdbcType=DATE},
+      STATUS = #{status,jdbcType=INTEGER},
+      CORE_TYPE = #{coreType,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

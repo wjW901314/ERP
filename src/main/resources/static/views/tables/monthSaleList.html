@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>商品月销售统计</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../js/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">日期:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="month" name="month" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="monthSale-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <table id="monthSale-manage" lay-filter="monthSale-manage"></table>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<script src="../../js/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '/js/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'laydate','monthSaleList',], function () {
+        var $ = layui.$
+            , laydate = layui.laydate
+            , table = layui.table,
+            form = layui.form,admin = layui.admin;
+
+        laydate.render({
+            elem: '#month',
+            type: 'month'
+        });
+
+        //监听搜索
+        form.on('submit(monthSale-front-search)', function (data) {
+            var field = data.field;
+            admin.req({
+                url: layui.setter.serviceURI + '/sale/commodityMonthSalReport'
+                , Method: 'GET'
+                , dataType: 'json'
+                , data: field
+                , done: function (r) {
+                    if (r.success) {
+                        table.reload('monthSale-manage');
+                        layer.msg(r.msg);
+                    }
+                }
+            });
+            //执行重载
+            table.reload('monthSale-manage', {
+                where: field
+            });
+        });
+        //事件
+        var active = {
+            batchdel: function () {
+                var checkStatus = table.checkStatus('monthSale-manage')
+                    , checkData = checkStatus.data; //得到选中的数据
+                if (checkData.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                layer.confirm('确定删除吗？', function (index) {
+                    //执行 Ajax 后重载
+                    admin.req({
+                        url: layui.setter.serviceURI + '/monthSale/delete'
+                        , Method: 'GET'
+                        , dataType: 'json'
+                        , data: {"code": checkData[0].code}
+                        , done: function (r) {
+                            if (r.success) {
+                                table.reload('monthSale-manage');
+                                layer.msg(r.msg);
+                            }
+                        }
+                    });
+                });
+            }
+            , add: function () {
+                layer.open({
+                    type: 2
+                    , title: '添加客户信息'
+                    , content: 'addClientInfo'
+                    , maxmin: true
+                    , area: ['500px', '450px']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                            , submitID = 'monthSale-front-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                            var field = data.field; //获取提交的字段
+                            var jsonStr = JSON.stringify(field);
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            $.ajax({
+                                type: "POST"
+                                , url: layui.setter.serviceURI + "/client/add"
+                                , contentType: "application/json"
+                                , dataType: "JSON"
+                                , data: jsonStr
+                                , success: function (res) {
+                                    if (res.success) {
+                                        table.reload('client-manage'); //数据刷新
+                                        layer.close(index); //关闭弹层
+                                        layer.msg(res.msg);
+                                    } else {
+                                        layer.msg(res.msg);
+                                    }
+                                }
+                            });
+                        });
+                        submit.trigger('click');
+                    }
+                });
+            }
+        };
+
+        $('.layui-btn.layuiadmin-btn-useradmin').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
+</body>
+</html>

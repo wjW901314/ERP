@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wd.erp.mapper.CommodityManagementMapper">
+    <resultMap id="BaseResultMap" type="com.wd.erp.model.CommodityManagement">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="COMMODITY_NAME" property="commodityName" jdbcType="VARCHAR"/>
+        <result column="COMMODITY_SPELL" property="commoditySpell" jdbcType="VARCHAR"/>
+        <result column="COMMODITY_SPEC" property="commoditySpec" jdbcType="INTEGER"/>
+        <result column="COMMODITY_SUPPLIER" property="commoditySupplier" jdbcType="INTEGER"/>
+        <result column="STATUS" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, COMMODITY_NAME, COMMODITY_SPELL, COMMODITY_SPEC, COMMODITY_SUPPLIER, STATUS
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from business_commodity_management
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from business_commodity_management
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.wd.erp.model.CommodityManagement">
+    insert into business_commodity_management (id, COMMODITY_NAME, COMMODITY_SPELL, 
+      COMMODITY_SPEC, COMMODITY_SUPPLIER, STATUS
+      )
+    values (#{id,jdbcType=INTEGER}, #{commodityName,jdbcType=VARCHAR}, #{commoditySpell,jdbcType=VARCHAR}, 
+      #{commoditySpec,jdbcType=INTEGER}, #{commoditySupplier,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.wd.erp.model.CommodityManagement">
+        insert into business_commodity_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="commodityName != null">
+                COMMODITY_NAME,
+            </if>
+            <if test="commoditySpell != null">
+                COMMODITY_SPELL,
+            </if>
+            <if test="commoditySpec != null">
+                COMMODITY_SPEC,
+            </if>
+            <if test="commoditySupplier != null">
+                COMMODITY_SUPPLIER,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="commodityName != null">
+                #{commodityName,jdbcType=VARCHAR},
+            </if>
+            <if test="commoditySpell != null">
+                #{commoditySpell,jdbcType=VARCHAR},
+            </if>
+            <if test="commoditySpec != null">
+                #{commoditySpec,jdbcType=INTEGER},
+            </if>
+            <if test="commoditySupplier != null">
+                #{commoditySupplier,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wd.erp.model.CommodityManagement">
+        update business_commodity_management
+        <set>
+            <if test="commodityName != null">
+                COMMODITY_NAME = #{commodityName,jdbcType=VARCHAR},
+            </if>
+            <if test="commoditySpell != null">
+                COMMODITY_SPELL = #{commoditySpell,jdbcType=VARCHAR},
+            </if>
+            <if test="commoditySpec != null">
+                COMMODITY_SPEC = #{commoditySpec,jdbcType=INTEGER},
+            </if>
+            <if test="commoditySupplier != null">
+                COMMODITY_SUPPLIER = #{commoditySupplier,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wd.erp.model.CommodityManagement">
+    update business_commodity_management
+    set COMMODITY_NAME = #{commodityName,jdbcType=VARCHAR},
+      COMMODITY_SPELL = #{commoditySpell,jdbcType=VARCHAR},
+      COMMODITY_SPEC = #{commoditySpec,jdbcType=INTEGER},
+      COMMODITY_SUPPLIER = #{commoditySupplier,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="getMaxId" resultType="int">
+    select count(*) from business_commodity_management
+  </select>
+    <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from business_commodity_management t where t.STATUS = '0';
+    </select>
+    <select id="getOne" resultMap="BaseResultMap" parameterType="string">
+        select
+        <include refid="Base_Column_List"/>
+        from business_commodity_management t
+        where t.id = #{id,jdbcType=VARCHAR}
+        and t.STATUS = '0';
+    </select>
+</mapper>

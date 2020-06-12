@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wd.erp.mapper.BasisUserRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.wd.erp.model.BasisUserRole" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="LOGIN_NAME" property="loginName" jdbcType="VARCHAR" />
+    <result column="TEL_PHONE" property="telPhone" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="ROLE" property="role" jdbcType="VARCHAR" />
+    <result column="JOIN_TIME" property="joinTime" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, LOGIN_NAME, TEL_PHONE, EMAIL, ROLE, JOIN_TIME, STATUS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from basis_user_role
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="getAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"></include>
+    from basis_user_role
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from basis_user_role
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.wd.erp.model.BasisUserRole" >
+    insert into basis_user_role (id, LOGIN_NAME, TEL_PHONE, EMAIL, ROLE, JOIN_TIME, STATUS)
+    values (#{id,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, #{telPhone,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, #{joinTime,jdbcType=TIMESTAMP}, #{status,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wd.erp.model.BasisUserRole" >
+    insert into basis_user_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loginName != null" >
+        LOGIN_NAME,
+      </if>
+      <if test="telPhone != null" >
+        TEL_PHONE,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="role != null" >
+        ROLE,
+      </if>
+      <if test="joinTime != null" >
+        JOIN_TIME,
+      </if>
+      <if test="check != null" >
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loginName != null" >
+        #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="telPhone != null" >
+        #{telPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="joinTime != null" >
+        #{joinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="check != null" >
+        #{status,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wd.erp.model.BasisUserRole" >
+    update basis_user_role
+    <set >
+      <if test="loginName != null" >
+        LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="telPhone != null" >
+        TEL_PHONE = #{telPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        ROLE = #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="joinTime != null" >
+        JOIN_TIME = #{joinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="check != null" >
+        STATUS = #{status,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wd.erp.model.BasisUserRole" >
+    update basis_user_role
+    set LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+      TEL_PHONE = #{telPhone,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      ROLE = #{role,jdbcType=VARCHAR},
+      JOIN_TIME = #{joinTime,jdbcType=TIMESTAMP},
+      STATUS = #{status,jdbcType=BIT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

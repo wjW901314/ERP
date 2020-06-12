@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wd.erp.mapper.BasisUserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wd.erp.model.BasisUserInfo" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+    <result column="USER_SPELL" property="userSpell" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="ROLE" property="role" jdbcType="INTEGER" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="PASSWORD" property="userPwd" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, USER_NAME, USER_SPELL, PHONE, EMAIL, ROLE, STATUS,PASSWORD
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from pub_basis_user_info
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pub_basis_user_info
+  </select>
+  <select id="selectOne" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from pub_basis_user_info
+    where ID = #{userCode,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from pub_basis_user_info
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteUser" parameterType="java.lang.String">
+    delete from  pub_basis_user_info
+     where ID = #{userCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.wd.erp.model.BasisUserInfo" >
+    insert into pub_basis_user_info (ID, USER_NAME,
+      USER_SPELL, PHONE, EMAIL, 
+      ROLE, STATUS,PASSWORD)
+    values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
+      #{userSpell,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{role,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},#{userPwd,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wd.erp.model.BasisUserInfo" >
+    insert into pub_basis_user_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="userName != null" >
+        USER_NAME,
+      </if>
+      <if test="userSpell != null" >
+        USER_SPELL,
+      </if>
+      <if test="phone != null" >
+        PHONE,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="role != null" >
+        ROLE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="userPwd != null">
+        PASSWORD
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSpell != null" >
+        #{userSpell,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        #{role,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="userPwd != null">
+        #{userPwd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wd.erp.model.BasisUserInfo" >
+    update pub_basis_user_info
+    <set >
+      <if test="userName != null" >
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSpell != null" >
+        USER_SPELL = #{userSpell,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        ROLE = #{role,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="userPwd != null">
+        PASSWORD = #{userPwd,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wd.erp.model.BasisUserInfo" >
+    update pub_basis_user_info
+    set USER_NAME = #{userName,jdbcType=VARCHAR},
+      USER_SPELL = #{userSpell,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      ROLE = #{role,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=INTEGER},
+      PASSWORD = #{userPwd,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

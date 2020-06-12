@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wd.erp.mapper.PubDepartmentInfoMapper">
+    <resultMap id="BaseResultMap" type="com.wd.erp.model.PubDepartmentInfo">
+        <id column="DEPART_CODE" property="departCode" jdbcType="VARCHAR"/>
+        <result column="DEPART_NAME" property="departName" jdbcType="VARCHAR"/>
+        <result column="DEPART_SPELL" property="departSpell" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.wd.erp.model.PubDepartmentInfo" extends="BaseResultMap">
+        <result column="REMARKS" property="remarks" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    DEPART_CODE, DEPART_NAME, DEPART_SPELL, STATUS
+  </sql>
+    <sql id="Blob_Column_List">
+    REMARKS
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from pub_department
+        where DEPART_CODE = #{departCode,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from pub_department
+    where DEPART_CODE = #{departCode,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.wd.erp.model.PubDepartmentInfo">
+    insert into pub_department (DEPART_CODE, DEPART_NAME, DEPART_SPELL, 
+      STATUS, REMARKS)
+    values (#{departCode,jdbcType=VARCHAR}, #{departName,jdbcType=VARCHAR}, #{departSpell,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{remarks,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.wd.erp.model.PubDepartmentInfo">
+        insert into pub_department
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="departCode != null">
+                DEPART_CODE,
+            </if>
+            <if test="departName != null">
+                DEPART_NAME,
+            </if>
+            <if test="departSpell != null">
+                DEPART_SPELL,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="remarks != null">
+                REMARKS,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="departCode != null">
+                #{departCode,jdbcType=VARCHAR},
+            </if>
+            <if test="departName != null">
+                #{departName,jdbcType=VARCHAR},
+            </if>
+            <if test="departSpell != null">
+                #{departSpell,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="remarks != null">
+                #{remarks,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wd.erp.model.PubDepartmentInfo">
+        update pub_department
+        <set>
+            <if test="departName != null">
+                DEPART_NAME = #{departName,jdbcType=VARCHAR},
+            </if>
+            <if test="departSpell != null">
+                DEPART_SPELL = #{departSpell,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="remarks != null">
+                REMARKS = #{remarks,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where DEPART_CODE = #{departCode,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wd.erp.model.PubDepartmentInfo">
+    update pub_department
+    set DEPART_NAME = #{departName,jdbcType=VARCHAR},
+      DEPART_SPELL = #{departSpell,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=INTEGER},
+      REMARKS = #{remarks,jdbcType=LONGVARCHAR}
+    where DEPART_CODE = #{departCode,jdbcType=VARCHAR}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.wd.erp.model.PubDepartmentInfo">
+    update pub_department
+    set DEPART_NAME = #{departName,jdbcType=VARCHAR},
+      DEPART_SPELL = #{departSpell,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=INTEGER}
+    where DEPART_CODE = #{departCode,jdbcType=VARCHAR}
+  </update>
+    <select id="getAll" resultMap="BaseResultMap" parameterType="string">
+        select
+        <include refid="Base_Column_List"></include>
+        from pub_department t
+        where t.STATUS = 0
+        <if test="keyWord != null and keyWord != ''">
+            and t.DEPART_CODE like '%' || UPPER(#{keyWord,jdbcType=VARCHAR}) ||'%'
+            or t.DEPART_NAME like '%' || UPPER(#{keyWord,jdbcType=VARCHAR}) ||'%'
+            or t.DEPART_SPELL like '%' || UPPER(#{keyWord,jdbcType=VARCHAR}) ||'%'
+        </if>
+    </select>
+    <select id="getMaxCode" resultType="int">
+        select count(t.DEPART_CODE) from pub_department t
+    </select>
+</mapper>

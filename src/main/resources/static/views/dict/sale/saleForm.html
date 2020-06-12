@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>添加商品销售信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../../js/layui/css/layui.css" media="all">
+    <script src="../../../js/lib/mtils.js"></script>
+</head>
+<body>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
+     style="padding: 20px 0 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品名称</label>
+        <div class="layui-input-inline">
+            <select id="commodityList" name="commodityCode" lay-verify="required"
+                    lay-filter="commodityList">
+                <option value="">请选择标签</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">拼音简码</label>
+        <div class="layui-input-inline">
+            <input type="text" id="commoditySpell" name="commoditySpell" placeholder="拼音简码自动生成" autocomplete="off"
+                   class="layui-input"
+                   disabled="disabled">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">销售价格</label>
+        <div class="layui-input-inline">
+            <input type="text" id="salePrice" name="salePrice" lay-verify="required" placeholder="请输入销售价格"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">数量</label>
+        <div class="layui-input-inline">
+            <input type="text" id="saleNumber" name="saleNumber" lay-verify="required" placeholder="请输入名称"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">客户</label>
+        <div class="layui-input-inline">
+            <select id="clientList" name="clientCode" lay-verify="required"
+                    lay-filter="clientList">
+                <option value="">请选择标签</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="commoditySale-front-submit" id="commoditySale-front-submit"
+               value="确认">
+    </div>
+</div>
+
+<script src="../../../js/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '/js/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'upload'], function () {
+        var $ = layui.$
+            , form = layui.form;
+
+        //商品下拉选择
+        $.get("/commodityInfo/getAll", {}, function (e) {
+            var list = e.data;
+            var select = document.getElementById("commodityList");
+            if (list != null || list.size() > 0) {
+                for (var c in list) {
+                    var option = document.createElement("option");
+                    option.setAttribute("value", list[c].commodityCode);
+                    option.innerText = list[c].commodityName;
+                    select.appendChild(option);
+                }
+            }
+            form.render('select')
+        }, "json");
+
+        //客户信息下拉
+        $.get("/client/getAll", {}, function (e) {
+            var list = e.data;
+            var select = document.getElementById("clientList");
+            if (list != null || list.size() > 0) {
+                for (var c in list) {
+                    var option = document.createElement("option");
+                    option.setAttribute("value", list[c].code);
+                    option.innerText = list[c].name;
+                    select.appendChild(option);
+                }
+            }
+            form.render('select')
+        }, "json");
+
+        form.on('select(commodityList)', function (data) {
+            var selectText = $("#commodityList").find("option:selected").text();
+            $("#commoditySpell").attr("value", Mtils.utils.makePy(selectText, true));
+            form.render();
+        });
+
+        function child(data) {
+            console.log(data);
+        }
+        // form.on('select(demo)', function(data){
+        //     var val=data.value;
+        //     console.info(val);
+        // });
+
+        // $("#commodityList").change(function () {
+        //     var selectText = $("#commodityList").find("option:selected").text();
+        //     $("#commoditySpell").innerText = Mtils.utils.makePy(selectText, true);
+        // });
+
+    })
+</script>
+</body>
+<!--<script>-->
+<!--    window.onload = function () {-->
+<!--        document.getElementById("commodityList").onchange = function () {-->
+<!--            document.getElementById("commoditySpell").value = this.value();-->
+<!--        };-->
+<!--    }-->
+<!--</script>-->
+</html>

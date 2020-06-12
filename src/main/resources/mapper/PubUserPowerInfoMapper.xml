@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wd.erp.mapper.PubUserPowerInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wd.erp.model.PubUserPowerInfo" >
+    <id column="POWER_CODE" property="powerCode" jdbcType="VARCHAR" />
+    <result column="USER_CODE" property="userCode" jdbcType="VARCHAR" />
+    <result column="ROLE_CODE" property="roleCode" jdbcType="VARCHAR" />
+    <result column="POWER_NAME" property="powerName" jdbcType="VARCHAR" />
+    <result column="POWER_SPELL" property="powerSpell" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    POWER_CODE, USER_CODE, ROLE_CODE, POWER_NAME, POWER_SPELL
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from pub_user_power
+    where POWER_CODE = #{powerCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from pub_user_power
+    where POWER_CODE = #{powerCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.wd.erp.model.PubUserPowerInfo" >
+    insert into pub_user_power (POWER_CODE, USER_CODE, ROLE_CODE, 
+      POWER_NAME, POWER_SPELL)
+    values (#{powerCode,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, #{roleCode,jdbcType=VARCHAR}, 
+      #{powerName,jdbcType=VARCHAR}, #{powerSpell,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wd.erp.model.PubUserPowerInfo" >
+    insert into pub_user_power
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="powerCode != null" >
+        POWER_CODE,
+      </if>
+      <if test="userCode != null" >
+        USER_CODE,
+      </if>
+      <if test="roleCode != null" >
+        ROLE_CODE,
+      </if>
+      <if test="powerName != null" >
+        POWER_NAME,
+      </if>
+      <if test="powerSpell != null" >
+        POWER_SPELL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="powerCode != null" >
+        #{powerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCode != null" >
+        #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="powerName != null" >
+        #{powerName,jdbcType=VARCHAR},
+      </if>
+      <if test="powerSpell != null" >
+        #{powerSpell,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wd.erp.model.PubUserPowerInfo" >
+    update pub_user_power
+    <set >
+      <if test="userCode != null" >
+        USER_CODE = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCode != null" >
+        ROLE_CODE = #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="powerName != null" >
+        POWER_NAME = #{powerName,jdbcType=VARCHAR},
+      </if>
+      <if test="powerSpell != null" >
+        POWER_SPELL = #{powerSpell,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where POWER_CODE = #{powerCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wd.erp.model.PubUserPowerInfo" >
+    update pub_user_power
+    set USER_CODE = #{userCode,jdbcType=VARCHAR},
+      ROLE_CODE = #{roleCode,jdbcType=VARCHAR},
+      POWER_NAME = #{powerName,jdbcType=VARCHAR},
+      POWER_SPELL = #{powerSpell,jdbcType=VARCHAR}
+    where POWER_CODE = #{powerCode,jdbcType=VARCHAR}
+  </update>
+</mapper>
